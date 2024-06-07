@@ -1,16 +1,26 @@
 <template>
   <div v-show="openModal" class="modal-view">
-    <!-- <ScaleLoader :loading="loadingDone" color="rgba(235, 235, 235, 0.64)" height="30" width="40" /> -->
-
-    <div class="modal-content">
-      <div class="modal-block-image">
-        <img class="modal-image" :src="imageUrl" alt="Image" />
+    <div class="modal">
+      <h3>{{ showItem.name }}</h3>
+      <div class="modal-content">
+        <div class="modal-block-image">
+          <img class="modal-image" :src="imageUrl" alt="Image" />
+        </div>
+        <div class="modal-block-info">
+          <div class="block-info">
+            <b>Total: </b>
+            <p>{{ showItem.total }}</p>
+          </div>
+          <div class="block-info">
+            <b>HP: </b>
+            <p>{{ showItem.hp }}</p>
+          </div>
+        </div>
       </div>
-      <div class="modal-block-info">
-        
+      <div class="modal-footer">
+        <button class="buttonView" @click="close">Close</button>
       </div>
     </div>
-    <button @click="close">Close</button>
   </div>
 </template>
 
@@ -28,7 +38,7 @@ export default {
   data() {
     return {
       showItem: {},
-      imageUrl: null
+      imageUrl: null,
     }
   },
 
@@ -69,7 +79,7 @@ export default {
       this.imageUrl = null
       this.loadingDone = false
       this.$emit('closeModal')
-    }
+    },
   }
 }
 </script>
