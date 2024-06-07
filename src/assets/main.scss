@@ -230,6 +230,19 @@ th {
   }
 }
 
+.modal-block-info {
+  .block-info {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    height: 2.5rem;
+
+    b {
+      width: 10rem;
+    }
+  }
+}
+
 .modal-footer {
   text-align: right;
   width: inherit;

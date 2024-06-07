@@ -8,12 +8,24 @@
         </div>
         <div class="modal-block-info">
           <div class="block-info">
-            <b>Total: </b>
+            <b>Type</b>
+            <p>{{ matchTypeName(showItem.type_1, showItem.type_2) }}</p>
+          </div>
+          <div class="block-info">
+            <b>Total</b>
             <p>{{ showItem.total }}</p>
           </div>
           <div class="block-info">
-            <b>HP: </b>
+            <b>HP</b>
             <p>{{ showItem.hp }}</p>
+          </div>
+          <div class="block-info">
+            <b>Generation</b>
+            <p>{{ showItem.generation }}</p>
+          </div>
+          <div class="block-info">
+            <b>Is legendary?</b>
+            <p>{{ showItem.legendary === 0 ? 'No' : 'Yes' }}</p>
           </div>
         </div>
       </div>
@@ -39,6 +51,7 @@ export default {
     return {
       showItem: {},
       imageUrl: null,
+      listAllTypesName: [],
     }
   },
 
@@ -47,6 +60,7 @@ export default {
       if (bool) {
         this.getItemImage(this.pokemonId);
         this.getItem(this.pokemonId);
+        this.getListTypeName();
       }
     }
   },
@@ -79,6 +93,27 @@ export default {
       this.imageUrl = null
       this.loadingDone = false
       this.$emit('closeModal')
+    },
+
+    async getListTypeName() {
+      await axios
+        .get(`https://api.vandvietnam.com/api/pokemon-api/types`)
+        .then((response) => {
+          if (response.data) {
+            this.listAllTypesName = response.data.data;
+            this.pokemonTypes = [...this.listAllTypesName];
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        })
+    },
+
+    matchTypeName(type1, type2) {
+      let list = this.listAllTypesName.filter((i) => {
+        return i.id === type1 || i.id === type2;
+      })
+      return list.map((item) => item.name).join(', ');
     },
   }
 }
