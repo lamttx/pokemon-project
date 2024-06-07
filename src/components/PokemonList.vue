@@ -2,7 +2,8 @@
   <div class="page-layout">
     <div>
       <label>Filter by type</label>
-      <select v-model="selectedValue" class="form-select">
+      <select v-model="selectedValue" class="form-select" @change="filterBy">
+        <option value="">All</option>
         <option v-for="type in pokemonTypes" :value="type.id" :key="type.id">
           {{ type.name }}
         </option>
@@ -113,7 +114,7 @@ export default {
 
   mounted() {
     this.getListTypeName();
-    this.sortPokemon('number', null, null);
+    this.sortPokemon('number', 'type', '');
   },
 
   methods: {
@@ -150,7 +151,6 @@ export default {
           if (response.data) {
             this.listAllTypesName = response.data.data;
             this.pokemonTypes = [...this.listAllTypesName];
-            this.pokemonTypes.unshift({ id: '', name: 'All' });
           }
         })
         .catch((error) => {
@@ -165,6 +165,10 @@ export default {
       return list.map((item) => item.name).join(', ');
     },
 
+    filterBy() {
+      this.sortPokemon(this.sortKeyword, 'type', this.selectedValue);
+    },
+
     openPokemonModal(item) {
       this.viewPokemon = true;
       this.pokemonID = item.id;
@@ -174,7 +178,7 @@ export default {
       console.log(pageNum);
       await axios
         .get(
-          `https://api.vandvietnam.com/api/pokemon-api/pokemons?page[number]=${pageNum}&page[size]=10&sort=${this.sortKeyword}`
+          `https://api.vandvietnam.com/api/pokemon-api/pokemons?page[number]=${pageNum}&page[size]=10&sort=${this.sortKeyword}&filter[type]=${this.selectedValue}`
         )
         .then((response) => {
           if (response.data) {
